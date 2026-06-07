@@ -198,15 +198,17 @@ async function solve(){
 
     renderSolution(data);
     $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
-  }catch(e){
-    const data = staticDemoSolve();
-    renderSolution(data);
+  } catch(e){
+  console.warn('API solver unavailable; using static demo.', e);
 
-    $('kpiStatus').textContent = 'STATIC DEMO';
-    $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
-    $('whyNotText').textContent =
-      data.why_not ||
-      'GitHub Pages cannot run the FastAPI solver, so this portfolio was generated from the embedded static universe.';
+  const data = staticDemoSolve();
+  console.log('STATIC DEMO RESULT', data);
+
+  renderSolution(data);
+
+  $('kpiStatus').textContent = 'STATIC DEMO';
+  $('kpiBackend').textContent = 'backend: static-client';
+  $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
   }finally{
     $('solveBtn').disabled = false;
     $('solveBtn').textContent = 'Solve Portfolio';
