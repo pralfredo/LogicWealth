@@ -9,6 +9,68 @@ const defaultValues = {
   whyNot:'NVDA', techMax:0.26, healthMax:0.22, energyMax:0.12, utilitiesMin:0.04, staplesMin:0.05
 };
 
+const STATIC_UNIVERSE = [
+  { ticker: "AAPL", sector: "Technology", price: 195.30, expected_return: 0.112, volatility: 0.215, beta: 1.18, esg: 72, adv: 62000000 },
+  { ticker: "MSFT", sector: "Technology", price: 420.10, expected_return: 0.105, volatility: 0.198, beta: 1.05, esg: 78, adv: 35000000 },
+  { ticker: "NVDA", sector: "Technology", price: 890.40, expected_return: 0.168, volatility: 0.352, beta: 1.72, esg: 64, adv: 48000000 },
+  { ticker: "AVGO", sector: "Technology", price: 1320.20, expected_return: 0.124, volatility: 0.287, beta: 1.21, esg: 66, adv: 4200000 },
+  { ticker: "ORCL", sector: "Technology", price: 124.60, expected_return: 0.081, volatility: 0.221, beta: 1.02, esg: 70, adv: 11000000 },
+  { ticker: "CRM", sector: "Technology", price: 271.50, expected_return: 0.092, volatility: 0.263, beta: 1.18, esg: 76, adv: 6500000 },
+  { ticker: "ADBE", sector: "Technology", price: 525.80, expected_return: 0.089, volatility: 0.244, beta: 1.11, esg: 79, adv: 3300000 },
+  { ticker: "AMD", sector: "Technology", price: 162.40, expected_return: 0.141, volatility: 0.338, beta: 1.68, esg: 67, adv: 59000000 },
+  { ticker: "INTC", sector: "Technology", price: 32.70, expected_return: 0.052, volatility: 0.301, beta: 1.24, esg: 62, adv: 42000000 },
+  { ticker: "CSCO", sector: "Technology", price: 48.90, expected_return: 0.059, volatility: 0.181, beta: 0.86, esg: 74, adv: 18000000 },
+
+  { ticker: "GOOGL", sector: "Communication Services", price: 173.20, expected_return: 0.098, volatility: 0.226, beta: 1.07, esg: 71, adv: 28000000 },
+  { ticker: "META", sector: "Communication Services", price: 486.10, expected_return: 0.121, volatility: 0.292, beta: 1.31, esg: 63, adv: 17000000 },
+  { ticker: "NFLX", sector: "Communication Services", price: 642.30, expected_return: 0.109, volatility: 0.315, beta: 1.26, esg: 68, adv: 3800000 },
+  { ticker: "DIS", sector: "Communication Services", price: 103.40, expected_return: 0.061, volatility: 0.244, beta: 1.12, esg: 70, adv: 9500000 },
+  { ticker: "TMUS", sector: "Communication Services", price: 176.80, expected_return: 0.074, volatility: 0.169, beta: 0.72, esg: 73, adv: 4700000 },
+
+  { ticker: "AMZN", sector: "Consumer Discretionary", price: 184.70, expected_return: 0.113, volatility: 0.274, beta: 1.23, esg: 65, adv: 41000000 },
+  { ticker: "TSLA", sector: "Consumer Discretionary", price: 178.20, expected_return: 0.137, volatility: 0.448, beta: 2.05, esg: 59, adv: 96000000 },
+  { ticker: "HD", sector: "Consumer Discretionary", price: 342.50, expected_return: 0.071, volatility: 0.188, beta: 0.94, esg: 72, adv: 3900000 },
+  { ticker: "MCD", sector: "Consumer Discretionary", price: 285.90, expected_return: 0.064, volatility: 0.142, beta: 0.61, esg: 77, adv: 2700000 },
+  { ticker: "NKE", sector: "Consumer Discretionary", price: 94.30, expected_return: 0.056, volatility: 0.236, beta: 1.03, esg: 75, adv: 8200000 },
+
+  { ticker: "JPM", sector: "Financials", price: 198.40, expected_return: 0.084, volatility: 0.217, beta: 1.12, esg: 69, adv: 9300000 },
+  { ticker: "BAC", sector: "Financials", price: 39.10, expected_return: 0.078, volatility: 0.241, beta: 1.20, esg: 66, adv: 37000000 },
+  { ticker: "GS", sector: "Financials", price: 456.80, expected_return: 0.086, volatility: 0.229, beta: 1.15, esg: 68, adv: 2300000 },
+  { ticker: "MS", sector: "Financials", price: 96.50, expected_return: 0.081, volatility: 0.222, beta: 1.11, esg: 70, adv: 7100000 },
+  { ticker: "V", sector: "Financials", price: 276.40, expected_return: 0.087, volatility: 0.173, beta: 0.92, esg: 76, adv: 6700000 },
+  { ticker: "MA", sector: "Financials", price: 456.10, expected_return: 0.091, volatility: 0.181, beta: 0.96, esg: 75, adv: 3100000 },
+  { ticker: "AXP", sector: "Financials", price: 238.70, expected_return: 0.082, volatility: 0.226, beta: 1.18, esg: 67, adv: 2900000 },
+
+  { ticker: "UNH", sector: "Healthcare", price: 512.50, expected_return: 0.083, volatility: 0.177, beta: 0.74, esg: 73, adv: 3900000 },
+  { ticker: "JNJ", sector: "Healthcare", price: 151.80, expected_return: 0.067, volatility: 0.134, beta: 0.62, esg: 83, adv: 9800000 },
+  { ticker: "LLY", sector: "Healthcare", price: 883.20, expected_return: 0.128, volatility: 0.241, beta: 0.87, esg: 78, adv: 3100000 },
+  { ticker: "PFE", sector: "Healthcare", price: 28.90, expected_return: 0.042, volatility: 0.201, beta: 0.69, esg: 76, adv: 35000000 },
+  { ticker: "MRK", sector: "Healthcare", price: 128.40, expected_return: 0.074, volatility: 0.159, beta: 0.58, esg: 81, adv: 8900000 },
+  { ticker: "ABBV", sector: "Healthcare", price: 171.20, expected_return: 0.071, volatility: 0.166, beta: 0.64, esg: 74, adv: 6200000 },
+  { ticker: "TMO", sector: "Healthcare", price: 575.90, expected_return: 0.076, volatility: 0.196, beta: 0.82, esg: 79, adv: 1600000 },
+
+  { ticker: "PG", sector: "Consumer Staples", price: 166.40, expected_return: 0.061, volatility: 0.121, beta: 0.48, esg: 80, adv: 7200000 },
+  { ticker: "KO", sector: "Consumer Staples", price: 62.10, expected_return: 0.052, volatility: 0.113, beta: 0.43, esg: 78, adv: 14000000 },
+  { ticker: "PEP", sector: "Consumer Staples", price: 178.80, expected_return: 0.057, volatility: 0.128, beta: 0.51, esg: 79, adv: 5600000 },
+  { ticker: "COST", sector: "Consumer Staples", price: 812.40, expected_return: 0.082, volatility: 0.174, beta: 0.78, esg: 76, adv: 2200000 },
+  { ticker: "WMT", sector: "Consumer Staples", price: 67.20, expected_return: 0.064, volatility: 0.139, beta: 0.55, esg: 77, adv: 16000000 },
+
+  { ticker: "XOM", sector: "Energy", price: 114.50, expected_return: 0.073, volatility: 0.238, beta: 1.05, esg: 58, adv: 18000000 },
+  { ticker: "CVX", sector: "Energy", price: 157.30, expected_return: 0.069, volatility: 0.221, beta: 0.98, esg: 60, adv: 8500000 },
+  { ticker: "COP", sector: "Energy", price: 112.70, expected_return: 0.076, volatility: 0.257, beta: 1.11, esg: 59, adv: 6400000 },
+
+  { ticker: "NEE", sector: "Utilities", price: 74.20, expected_return: 0.074, volatility: 0.169, beta: 0.71, esg: 86, adv: 11000000 },
+  { ticker: "DUK", sector: "Utilities", price: 102.60, expected_return: 0.053, volatility: 0.137, beta: 0.44, esg: 75, adv: 3900000 },
+  { ticker: "SO", sector: "Utilities", price: 78.40, expected_return: 0.055, volatility: 0.132, beta: 0.41, esg: 74, adv: 5100000 },
+
+  { ticker: "CAT", sector: "Industrials", price: 337.90, expected_return: 0.083, volatility: 0.224, beta: 1.09, esg: 65, adv: 3100000 },
+  { ticker: "GE", sector: "Industrials", price: 162.70, expected_return: 0.092, volatility: 0.251, beta: 1.18, esg: 68, adv: 7200000 },
+  { ticker: "HON", sector: "Industrials", price: 203.40, expected_return: 0.071, volatility: 0.181, beta: 0.96, esg: 73, adv: 2900000 },
+  { ticker: "RTX", sector: "Industrials", price: 105.80, expected_return: 0.066, volatility: 0.176, beta: 0.82, esg: 62, adv: 6100000 },
+
+  { ticker: "PLD", sector: "Real Estate", price: 119.60, expected_return: 0.064, volatility: 0.214, beta: 0.91, esg: 72, adv: 3600000 }
+];
+
 let universe = [];
 let latest = null;
 
@@ -145,9 +207,6 @@ function loadStress(){
 }
 
 async function loadUniverse() {
-  const tbody = document.querySelector("#universeTableBody");
-  const apiStatus = document.querySelector("#apiStatus");
-
   try {
     const response = await fetch(`${API_BASE}/api/assets`);
 
@@ -156,49 +215,34 @@ async function loadUniverse() {
     }
 
     const assets = await response.json();
-
-    if (apiStatus) {
-      apiStatus.textContent = "API online";
-      apiStatus.classList.remove("offline");
-      apiStatus.classList.add("online");
-    }
-
+    setApiStatus("API online", true);
     renderUniverse(assets);
-  } catch (apiError) {
-    console.warn("FastAPI unavailable. Loading static universe fallback.", apiError);
+  } catch (error) {
+    setApiStatus("Static demo mode", false);
+    renderUniverse(STATIC_UNIVERSE);
+  }
+}
 
-    try {
-      const fallbackResponse = await fetch("./data/universe.json");
+function setApiStatus(text, online) {
+  const apiStatus = document.querySelector("#apiStatus");
+  if (!apiStatus) return;
 
-      if (!fallbackResponse.ok) {
-        throw new Error("Static universe file not found");
-      }
+  apiStatus.textContent = text;
 
-      const assets = await fallbackResponse.json();
-
-      if (apiStatus) {
-        apiStatus.textContent = "Static demo mode";
-        apiStatus.classList.remove("online");
-        apiStatus.classList.add("offline");
-      }
-
-      renderUniverse(assets);
-    } catch (fallbackError) {
-      console.error("Universe fallback failed:", fallbackError);
-
-      if (tbody) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8">Could not load universe. Missing ./data/universe.json.</td>
-          </tr>
-        `;
-      }
-    }
+  if (online) {
+    apiStatus.classList.add("online");
+    apiStatus.classList.remove("offline");
+  } else {
+    apiStatus.classList.add("offline");
+    apiStatus.classList.remove("online");
   }
 }
 
 function renderUniverse(assets) {
-  const tbody = document.querySelector("#universeTableBody");
+  const tbody =
+    document.querySelector("#universeTableBody") ||
+    document.querySelector("#universe tbody") ||
+    document.querySelector("tbody");
 
   if (!tbody) return;
 
@@ -249,6 +293,10 @@ function tick(){
   requestAnimationFrame(tick);
 }
 tick();
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadUniverse();
+});
 
 $('solveBtn').addEventListener('click', solve);
 $('resetBtn').addEventListener('click', () => { reset(); solve(); });
