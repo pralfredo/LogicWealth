@@ -328,6 +328,93 @@ function solveStaticDemo() {
 }
 }
 
+function staticDemoSolve() {
+  const c = constraintsFromForm();
+  const capital = readNumber('capital') || 1000000;
+  const k = Number(c.cardinality?.exactly || 18);
+
+  const esgMin = Number(c.esg?.min_score || 58);
+  const liquidityMin = Number(c.liquidity?.min_average_daily_volume || 8000000);
+  const betaMin = Number(c.risk?.beta?.min || 0.80);
+  const betaMax = Number(c.risk?.beta?.max || 1.15);
+  const volMax = Number(c.risk?.volatility?.max || 0.26);
+  const whyTicker = ($('whyNot').value || 'NVDA').trim().toUpperCase();
+
+  let candidates = STATIC_UNIVERSE.filter(a =>
+    Number(a.esg) >= esgMin &&
+    Number(a.adv) >= liquidityMin &&
+    Number(a.beta) >= betaMin &&
+    Number(a.beta) <= betaMax &&
+    Number(a.volatility) <= volMax
+  );
+
+  candidates = candidates
+    .map(a => ({
+      ...a,
+      score:
+        Number(a.expected_return) * 3.0 -
+        Number(a.volatility) * 1.2 +
+        Number(a.esg) / 500
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const selected = candidates.slice(0, k);
+  const weight = selected.length ? 1 / selected.length : 0;
+
+  const holdings = selected.map(asset => ({
+    ticker: asset.ticker,
+    sector: asset.sector,
+    weight: weight,
+    shares: Math.floor((capital * weight) / Number(asset.price)),
+    expected_return: asset.expected_return,
+    volatility: asset.volatility,
+    beta: asset.beta,
+    esg: asset.esg
+  }));
+
+  const avg = xs => xs.length ? xs.reduce((a, b) => a + Number(b), 0) / xs.length : 0;
+
+  const sectorExposure = {};
+  for (const h of holdings) {
+    sectorExposure[h.sector] = (sectorExposure[h.sector] || 0) + h.weight;
+  }
+
+  const whyAsset = STATIC_UNIVERSE.find(a => a.ticker === whyTicker);
+  let whyNot = 'Static demo mode: GitHub Pages cannot run the FastAPI backend, so this portfolio was generated client-side from the embedded universe.';
+
+  if (whyAsset && !holdings.find(h => h.ticker === whyTicker)) {
+    const reasons = [];
+    if (whyAsset.esg < esgMin) reasons.push(`ESG ${whyAsset.esg} is below ${esgMin}`);
+    if (whyAsset.adv < liquidityMin) reasons.push(`ADV ${whyAsset.adv.toLocaleString()} is below ${liquidityMin.toLocaleString()}`);
+    if (whyAsset.beta < betaMin || whyAsset.beta > betaMax) reasons.push(`beta ${whyAsset.beta.toFixed(2)} is outside [${betaMin}, ${betaMax}]`);
+    if (whyAsset.volatility > volMax) reasons.push(`volatility ${(whyAsset.volatility * 100).toFixed(1)}% exceeds ${(volMax * 100).toFixed(1)}%`);
+
+    whyNot = `${whyTicker} was excluded because ${reasons.length ? reasons.join('; ') : 'it was not among the top-ranked feasible assets under the static scoring rule'}.`;
+  }
+
+  return {
+    status: 'static-demo',
+    backend: 'static-client',
+    metrics: {
+      expected_return: avg(holdings.map(h => h.expected_return)),
+      volatility: avg(holdings.map(h => h.volatility)),
+      beta: avg(holdings.map(h => h.beta)),
+      sharpe_proxy: avg(holdings.map(h => h.expected_return)) / Math.max(avg(holdings.map(h => h.volatility)), 0.0001)
+    },
+    holdings: holdings,
+    sector_exposure: sectorExposure,
+    checks: [
+      `Generated ${holdings.length} holdings from static 50-asset universe.`,
+      `Applied ESG minimum ${esgMin}.`,
+      `Applied liquidity minimum ADV ${liquidityMin.toLocaleString()}.`,
+      `Applied beta range [${betaMin}, ${betaMax}].`,
+      `Applied volatility ceiling ${(volMax * 100).toFixed(1)}%.`,
+      `Static GitHub Pages demo mode.`
+    ],
+    why_not: whyNot
+  };
+}
+
 function average(values) {
   if (!values.length) return 0;
   return values.reduce((a, b) => a + b, 0) / values.length;
