@@ -32,7 +32,6 @@ This repository is designed to look and feel like something a strong graduate ap
 16. [Roadmap](#roadmap)
 17. [Resume and Portfolio Positioning](#resume-and-portfolio-positioning)
 18. [Limitations](#limitations)
-19. [License and Disclaimer](#license-and-disclaimer)
 
 ---
 
@@ -994,12 +993,6 @@ Important limitations include:
 - solver scalability has not yet been benchmarked on large universes
 
 These limitations are not weaknesses if they are presented honestly. They define the research frontier of the project. The valuable contribution is the architecture and formal framing: portfolio construction as satisfaction and optimization under explicit logical constraints.
-
----
-
-## License and Disclaimer
-
-This project is for educational and research purposes. It is not financial advice, investment advice, or a recommendation to buy or sell any security. The included data is sample data intended to demonstrate software architecture and formal modeling techniques. Any real investment use would require validated data, robust risk modeling, production-grade optimization, compliance review, and professional judgment.
 
 ---
 
