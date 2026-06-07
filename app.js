@@ -436,20 +436,40 @@ function solveStaticDemo() {
 }
 }
 
+function getNum(ids, fallback) {
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el && el.value !== "") {
+      const n = Number(el.value);
+      if (!Number.isNaN(n)) return n;
+    }
+  }
+  return fallback;
+}
+
+function getText(ids, fallback = "") {
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el && el.value !== "") return el.value;
+  }
+  return fallback;
+}
+
 function staticDemoSolve() {
-  const capital = readNumber('capital') || 1000000;
-  const k = readNumber('cardinality') || readNumber('exactlyK') || 18;
+  const capital = getNum(["capital"], 1000000);
+  const k = getNum(["kAssets", "exactlyK", "cardinality", "exactlyAssets"], 18);
 
-  const minWeight = readNumber('minWeight') || 0.025;
-  const maxWeight = readNumber('maxWeight') || 0.095;
-  const esgMin = readNumber('esgMin') || 58;
-  const liquidityMin = readNumber('liquidityMin') || 8000000;
-  const betaMin = readNumber('betaMin') || 0.80;
-  const betaMax = readNumber('betaMax') || 1.15;
-  const volMax = readNumber('volMax') || 0.26;
+  const minWeight = getNum(["minWeight", "min_weight"], 0.025);
+  const maxWeight = getNum(["maxWeight", "max_weight"], 0.095);
 
-  const whyTicker = ($('whyNot').value || 'NVDA').trim().toUpperCase();
+  const esgMin = getNum(["esgMin", "esgMinimum", "esg"], 58);
+  const liquidityMin = getNum(["liquidityMin", "liquidityMinimum", "advMin"], 8000000);
 
+  const betaMin = getNum(["betaMin"], 0.80);
+  const betaMax = getNum(["betaMax"], 1.15);
+  const volMax = getNum(["volMax", "volatilityMax"], 0.26);
+
+  const whyTicker = getText(["whyNot", "whyTicker"], "NVDA").trim().toUpperCase();
   let candidates = STATIC_UNIVERSE.filter(a =>
     Number(a.esg) >= esgMin &&
     Number(a.adv) >= liquidityMin &&
