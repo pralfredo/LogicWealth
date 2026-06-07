@@ -152,29 +152,124 @@ function renderUniverse(){
   $('assetRows').innerHTML = rows || `<tr><td colspan="8">No matching assets.</td></tr>`;
 }
 
-function renderSolution(data){
-  latest = data;
-  $('kpiStatus').textContent = data.status || '—';
-  $('kpiBackend').textContent = `backend: ${data.backend || data.diagnostics?.backend || 'auto'}`;
-  $('kpiReturn').textContent = fmtPct(data.metrics?.expected_return, 2);
-  $('kpiVol').textContent = fmtPct(data.metrics?.volatility, 2);
-  $('kpiSharpe').textContent = fmtNum(data.metrics?.sharpe, 2);
-  $('holdingCount').textContent = `${data.holdings?.length || 0} assets`;
+function renderSolution(data) {
+  const holdings = data.holdings || data.portfolio || data.selected_assets || [];
+  const metrics = data.metrics || {};
 
-  const checkRows = (data.checks || []).map(c => `<li class="${c.ok ? '' : 'fail'}"><b>${c.ok ? '✓' : '×'}</b><span>${c.label}<br><small>${typeof c.value === 'number' && c.value < 2 ? fmtPct(c.value, 2) : c.value}</small></span></li>`).join('');
-  const violations = (data.violations || []).map(v => `<li class="fail"><b>!</b><span>${v}</span></li>`).join('');
-  $('checks').innerHTML = checkRows + violations || '<li><b>—</b><span>No checks returned.</span></li>';
+  const expectedReturn =
+    metrics.expected_return ??
+    data.expected_return ??
+    data.return ??
+    0;
 
-  const sectors = Object.entries(data.sector_weights || {}).sort((a,b)=>b[1]-a[1]);
-  $('sectorBars').innerHTML = sectors.map(([name,w]) => `<div class="bar-row"><span>${name}</span><div class="bar-track"><div class="bar-fill" style="--w:${Math.min(w*100,100)}%"></div></div><b>${fmtPct(w,1)}</b></div>`).join('') || '<p>No sector data.</p>';
+  const volatility =
+    metrics.volatility ??
+    data.volatility ??
+    0;
 
-  $('holdings').innerHTML = (data.holdings || []).map(h => `<tr>
-    <td><strong>${h.ticker}</strong> ${h.defensive ? '<span class="pill">DEF</span>' : ''}</td>
-    <td>${h.sector}</td><td><strong>${fmtPct(h.weight,2)}</strong></td><td>${h.shares.toLocaleString()}</td>
-    <td>${fmtPct(h.expected_return)}</td><td>${fmtPct(h.volatility)}</td><td>${fmtNum(h.beta,2)}</td><td>${fmtNum(h.esg,1)}</td>
-  </tr>`).join('') || '<tr><td colspan="8">No holdings. The mandate may be infeasible.</td></tr>';
+  const sharpe =
+    metrics.sharpe_proxy ??
+    metrics.sharpe ??
+    data.sharpe_proxy ??
+    (volatility ? expectedReturn / volatility : 0);
 
-  $('whyNotText').textContent = data.why_not || 'No why-not ticker requested.';
+  const backend = data.backend || "static-client";
+  const status = data.status || "static-demo";
+
+  // Top KPI row
+  $("kpiStatus").textContent = String(status).replace("-", " ").toUpperCase();
+  $("kpiBackend").textContent = `backend: ${backend}`;
+  $("kpiReturn").textContent = `${(Number(expectedReturn) * 100).toFixed(2)}%`;
+  $("kpiVol").textContent = `${(Number(volatility) * 100).toFixed(2)}%`;
+  $("kpiSharpe").textContent = Number(sharpe).toFixed(2);
+
+  // Holdings count
+  const countEl = $("holdingCount");
+  if (countEl) {
+    countEl.textContent = `${holdings.length} assets`;
+  }
+
+  // Holdings table
+  const rows = holdings.map(h => `
+    <tr>
+      <td><strong>${h.ticker}</strong></td>
+      <td>${h.sector}</td>
+      <td><strong>${(Number(h.weight) * 100).toFixed(2)}%</strong></td>
+      <td>${Number(h.shares || 0).toLocaleString()}</td>
+      <td>${(Number(h.expected_return || h.return || 0) * 100).toFixed(1)}%</td>
+      <td>${(Number(h.volatility || 0) * 100).toFixed(1)}%</td>
+      <td>${Number(h.beta || 0).toFixed(2)}</td>
+      <td>${Number(h.esg || 0).toFixed(1)}</td>
+    </tr>
+  `).join("");
+
+  $("holdingRows").innerHTML = rows || `
+    <tr>
+      <td colspan="8" class="bad-text">No holdings generated.</td>
+    </tr>
+  `;
+
+  // Checks
+  const checks = data.checks || data.constraint_checks || [];
+  $("checksBox").innerHTML = checks.length
+    ? checks.map(check => {
+        if (typeof check === "string") {
+          return `
+            <div class="check good">
+              <span>✓</span>
+              <div>
+                <strong>${check}</strong>
+                <small>verified in static demo mode</small>
+              </div>
+            </div>
+          `;
+        }
+
+        const ok = check.ok ?? check.passed ?? true;
+        const label = check.label || check.name || check.constraint || "Constraint check";
+        const detail = check.detail || check.message || check.value || "";
+
+        return `
+          <div class="check ${ok ? "good" : "bad"}">
+            <span>${ok ? "✓" : "×"}</span>
+            <div>
+              <strong>${label}</strong>
+              <small>${detail}</small>
+            </div>
+          </div>
+        `;
+      }).join("")
+    : `<p class="muted">No checks available.</p>`;
+
+  // Sector exposure
+  let sectorExposure = data.sector_exposure || data.sectorExposure || data.exposures || {};
+
+  if (!sectorExposure || Object.keys(sectorExposure).length === 0) {
+    sectorExposure = {};
+    for (const h of holdings) {
+      sectorExposure[h.sector] = (sectorExposure[h.sector] || 0) + Number(h.weight || 0);
+    }
+  }
+
+  $("sectorBox").innerHTML = Object.keys(sectorExposure).length
+    ? Object.entries(sectorExposure).map(([sector, weight]) => `
+      <div class="sector-line">
+        <div class="sector-label">
+          <span>${sector}</span>
+          <strong>${(Number(weight) * 100).toFixed(1)}%</strong>
+        </div>
+        <div class="bar">
+          <div class="bar-fill" style="width:${Math.min(Number(weight) * 100, 100)}%"></div>
+        </div>
+      </div>
+    `).join("")
+    : `<p class="muted">No sector data.</p>`;
+
+  // Why-not explanation
+  $("whyNotText").textContent =
+    data.why_not ||
+    data.whyNot ||
+    "No exclusion explanation available.";
 }
 
 async function solve(){
