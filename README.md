@@ -64,6 +64,62 @@ The long-term vision is an institutional-grade research tool where a user can wr
 
 ---
 
+
+## Repository Structure
+
+The repository is organized as follows:
+
+```text
+LogicWealth/
+├── logicwealth/
+│   ├── dsl/
+│   │   ├── parser.py
+│   │   └── __init__.py
+│   ├── finance/
+│   │   ├── metrics.py
+│   │   └── __init__.py
+│   ├── solvers/
+│   │   ├── engine.py
+│   │   ├── greedy_backend.py
+│   │   ├── z3_backend.py
+│   │   └── __init__.py
+│   ├── explain/
+│   │   ├── report.py
+│   │   └── __init__.py
+│   ├── backtest/
+│   │   ├── simulator.py
+│   │   └── __init__.py
+│   ├── api/
+│   │   └── app.py
+│   ├── data_loader.py
+│   ├── models.py
+│   └── __init__.py
+├── dashboard/
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+├── data/
+│   ├── sample_assets.csv
+│   └── sample_correlations.csv
+├── examples/
+│   ├── growth_balanced.yaml
+│   └── portlogic_example.plogic
+├── paper/
+│   └── LogicWealth_Project_Brief.md
+├── tests/
+│   ├── test_parser.py
+│   └── test_solver.py
+├── logicwealth_cli.py
+├── requirements.txt
+├── pyproject.toml
+├── DEMO_OUTPUT.md
+└── README.md
+```
+
+Each folder has a specific purpose. The `logicwealth` package contains the actual system logic. The `data` folder contains the sample investment universe. The `examples` folder contains mandates and DSL examples. The `dashboard` folder contains a polished static visual demo. The `paper` folder frames the project as a research artifact. The `tests` folder verifies the core parser and solver behavior.
+
+---
+
 ## Why Logic Belongs in Portfolio Construction
 
 Classical portfolio optimization is usually introduced through the Markowitz framework. Given expected returns, a covariance matrix, and a risk-aversion parameter, one chooses weights that optimize a risk-return tradeoff. A simplified objective might look like this:
@@ -434,61 +490,6 @@ SCIP/HiGHS  for open-source optimization paths
 ```
 
 A serious research version would compare these backends on scalability, solve time, objective quality, and constraint expressiveness. That comparison would make the project much stronger than a single-solver demo.
-
----
-
-## Repository Structure
-
-The repository is organized as follows:
-
-```text
-LogicWealth/
-├── logicwealth/
-│   ├── dsl/
-│   │   ├── parser.py
-│   │   └── __init__.py
-│   ├── finance/
-│   │   ├── metrics.py
-│   │   └── __init__.py
-│   ├── solvers/
-│   │   ├── engine.py
-│   │   ├── greedy_backend.py
-│   │   ├── z3_backend.py
-│   │   └── __init__.py
-│   ├── explain/
-│   │   ├── report.py
-│   │   └── __init__.py
-│   ├── backtest/
-│   │   ├── simulator.py
-│   │   └── __init__.py
-│   ├── api/
-│   │   └── app.py
-│   ├── data_loader.py
-│   ├── models.py
-│   └── __init__.py
-├── dashboard/
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-├── data/
-│   ├── sample_assets.csv
-│   └── sample_correlations.csv
-├── examples/
-│   ├── growth_balanced.yaml
-│   └── portlogic_example.plogic
-├── paper/
-│   └── LogicWealth_Project_Brief.md
-├── tests/
-│   ├── test_parser.py
-│   └── test_solver.py
-├── logicwealth_cli.py
-├── requirements.txt
-├── pyproject.toml
-├── DEMO_OUTPUT.md
-└── README.md
-```
-
-Each folder has a specific purpose. The `logicwealth` package contains the actual system logic. The `data` folder contains the sample investment universe. The `examples` folder contains mandates and DSL examples. The `dashboard` folder contains a polished static visual demo. The `paper` folder frames the project as a research artifact. The `tests` folder verifies the core parser and solver behavior.
 
 ---
 
