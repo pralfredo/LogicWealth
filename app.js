@@ -145,42 +145,75 @@ function loadStress(){
 }
 
 async function loadUniverse() {
-  const tableBody = document.querySelector("#universeTableBody");
-  const status = document.querySelector("#apiStatus");
+  const tbody = document.querySelector("#universeTableBody");
+  const apiStatus = document.querySelector("#apiStatus");
 
   try {
     const response = await fetch(`${API_BASE}/api/assets`);
 
     if (!response.ok) {
-      throw new Error("API unavailable");
+      throw new Error("API offline");
     }
 
     const assets = await response.json();
-    status.textContent = "API online";
-    status.classList.remove("offline");
-    status.classList.add("online");
+
+    if (apiStatus) {
+      apiStatus.textContent = "API online";
+      apiStatus.classList.remove("offline");
+      apiStatus.classList.add("online");
+    }
 
     renderUniverse(assets);
-  } catch (error) {
-    console.warn("FastAPI unavailable. Loading static universe fallback.");
+  } catch (apiError) {
+    console.warn("FastAPI unavailable. Loading static universe fallback.", apiError);
 
     try {
-      const fallback = await fetch("./data/universe.json");
-      const assets = await fallback.json();
+      const fallbackResponse = await fetch("./data/universe.json");
 
-      status.textContent = "Static demo mode";
-      status.classList.remove("online");
-      status.classList.add("offline");
+      if (!fallbackResponse.ok) {
+        throw new Error("Static universe file not found");
+      }
+
+      const assets = await fallbackResponse.json();
+
+      if (apiStatus) {
+        apiStatus.textContent = "Static demo mode";
+        apiStatus.classList.remove("online");
+        apiStatus.classList.add("offline");
+      }
 
       renderUniverse(assets);
     } catch (fallbackError) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="8">Could not load universe data.</td>
-        </tr>
-      `;
+      console.error("Universe fallback failed:", fallbackError);
+
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8">Could not load universe. Missing ./data/universe.json.</td>
+          </tr>
+        `;
+      }
     }
   }
+}
+
+function renderUniverse(assets) {
+  const tbody = document.querySelector("#universeTableBody");
+
+  if (!tbody) return;
+
+  tbody.innerHTML = assets.map(asset => `
+    <tr>
+      <td>${asset.ticker}</td>
+      <td>${asset.sector}</td>
+      <td>$${Number(asset.price || 0).toFixed(2)}</td>
+      <td>${(Number(asset.expected_return || 0) * 100).toFixed(1)}%</td>
+      <td>${(Number(asset.volatility || 0) * 100).toFixed(1)}%</td>
+      <td>${Number(asset.beta || 0).toFixed(2)}</td>
+      <td>${asset.esg ?? "—"}</td>
+      <td>${Number(asset.adv || 0).toLocaleString()}</td>
+    </tr>
+  `).join("");
 }
 
 // Background constellation
