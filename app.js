@@ -274,11 +274,12 @@ function renderSolution(data) {
 
 async function solve(){
   const start = performance.now();
+
   $('solveBtn').disabled = true;
   $('solveBtn').textContent = 'Solving…';
   $('solveTime').textContent = 'compiling mandate';
 
-  try{
+  try {
     const payload = {
       backend: $('backend').value,
       capital: readNumber('capital'),
@@ -287,24 +288,36 @@ async function solve(){
     };
 
     const data = await api('/api/solve', {
-      method:'POST',
+      method: 'POST',
       body: JSON.stringify(payload)
     });
 
     renderSolution(data);
-    $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
-  } catch(e){
-  console.warn('API solver unavailable; using static demo.', e);
+    $('solveTime').textContent = `${Math.round(performance.now() - start)} ms`;
 
-  const data = staticDemoSolve();
-  console.log('STATIC DEMO RESULT', data);
+  } catch (e) {
+    console.warn('API solver unavailable; using static demo.', e);
 
-  renderSolution(data);
+    try {
+      const data = staticDemoSolve();
+      console.log('STATIC DEMO RESULT', data);
 
-  $('kpiStatus').textContent = 'STATIC DEMO';
-  $('kpiBackend').textContent = 'backend: static-client';
-  $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
-  }finally{
+      renderSolution(data);
+
+      $('kpiStatus').textContent = 'STATIC DEMO';
+      $('kpiBackend').textContent = 'backend: static-client';
+      $('solveTime').textContent = `${Math.round(performance.now() - start)} ms`;
+
+    } catch (demoError) {
+      console.error('Static demo failed:', demoError);
+
+      $('kpiStatus').textContent = 'ERROR';
+      $('kpiBackend').textContent = 'backend: static-client';
+      $('solveTime').textContent = 'failed';
+      $('whyNotText').textContent = `Static demo error:\n${demoError.message}`;
+    }
+
+  } finally {
     $('solveBtn').disabled = false;
     $('solveBtn').textContent = 'Solve Portfolio';
   }
