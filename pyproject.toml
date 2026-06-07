@@ -1,0 +1,9 @@
+[project]
+name = "logicwealth"
+version = "0.1.0"
+description = "SMT-based portfolio construction under real-world constraints"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

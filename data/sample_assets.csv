@@ -1,0 +1,48 @@
+ticker,sector,industry,price,expected_return,volatility,beta,esg,adv,defensive,quality,momentum
+AAPL,Technology,Technology,296.47,0.114,0.1532,1.421,54.8,50549970,false,-0.884,0.015
+MSFT,Technology,Technology,626.2,0.0839,0.2154,0.956,55.5,41084131,false,-0.752,-0.554
+NVDA,Technology,Technology,68.31,0.1809,0.4085,1.362,67.5,87981683,false,0.717,-0.421
+AMD,Technology,Technology,450.84,0.1301,0.2259,1.147,83.8,20361742,false,0.278,-0.255
+AVGO,Technology,Technology,340.73,0.1375,0.1338,0.948,60.0,62833997,false,-0.372,0.171
+CRM,Technology,Technology,445.71,0.1276,0.1859,1.536,79.3,25748203,false,0.05,0.75
+ADBE,Technology,Technology,576.36,0.1566,0.1833,1.684,56.6,40540439,false,-0.696,-0.022
+ORCL,Technology,Technology,259.33,0.0841,0.267,1.512,74.3,79415614,false,0.391,0.189
+LLY,Healthcare,Healthcare,509.87,0.1159,0.2204,1.122,88.8,45298358,true,-0.879,0.403
+JNJ,Healthcare,Healthcare,513.09,0.1229,0.3385,1.108,63.1,37792272,true,-0.955,-0.077
+UNH,Healthcare,Healthcare,212.04,0.0726,0.1458,0.497,82.0,15993918,true,-0.218,0.743
+MRK,Healthcare,Healthcare,652.75,0.0635,0.2188,0.89,86.5,74638786,true,-0.443,-0.169
+PFE,Healthcare,Healthcare,200.85,0.0927,0.3145,1.216,57.9,19978506,true,-0.533,-0.03
+ABBV,Healthcare,Healthcare,439.93,0.1169,0.1778,0.453,68.3,36386553,true,0.906,0.381
+JPM,Financials,Financials,592.68,0.1091,0.2559,1.191,54.1,81460305,false,0.749,0.596
+BAC,Financials,Financials,83.15,0.0962,0.2078,0.733,76.7,10291064,false,-0.582,-0.675
+GS,Financials,Financials,294.98,0.0907,0.1316,0.65,57.9,13624471,false,-0.949,0.749
+MS,Financials,Financials,122.83,0.1195,0.1527,0.852,65.5,35953892,false,0.698,0.986
+V,Financials,Financials,224.3,0.1039,0.2264,0.719,56.0,34124046,false,0.658,-0.677
+MA,Financials,Financials,54.34,0.0574,0.3292,1.073,57.7,51169656,false,0.056,0.957
+PG,Consumer Staples,Consumer Staples,586.94,0.1456,0.2732,0.659,66.3,19198572,true,0.065,0.558
+KO,Consumer Staples,Consumer Staples,611.35,0.0896,0.1691,1.099,90.4,77473447,true,0.637,0.48
+PEP,Consumer Staples,Consumer Staples,234.78,0.0788,0.2339,0.734,53.1,7374651,true,-0.482,0.385
+COST,Consumer Staples,Consumer Staples,295.71,0.1554,0.2184,1.2,90.5,86175053,true,-0.559,-0.546
+WMT,Consumer Staples,Consumer Staples,377.82,0.0757,0.165,0.949,87.1,76437019,true,0.306,0.599
+XOM,Energy,Energy,376.79,0.0639,0.2653,1.378,82.5,68761939,false,-0.643,0.578
+CVX,Energy,Energy,711.96,0.0899,0.2962,1.427,67.4,39117879,false,0.45,-0.66
+SLB,Energy,Energy,625.95,0.0683,0.1533,1.374,83.5,17424816,false,0.961,0.315
+COP,Energy,Energy,499.52,0.0918,0.2407,0.755,52.6,87525665,false,0.053,0.867
+NEE,Utilities,Utilities,244.47,0.1005,0.3118,1.111,60.2,26405958,true,-0.519,0.173
+DUK,Utilities,Utilities,362.59,0.0822,0.2122,0.555,87.5,35071642,true,0.167,0.809
+SO,Utilities,Utilities,48.37,0.0992,0.3219,0.851,72.7,49498059,true,-0.12,-0.634
+AEP,Utilities,Utilities,432.88,0.0554,0.2958,0.588,70.5,66641427,true,-0.348,0.037
+CAT,Industrials,Industrials,233.0,0.1133,0.2925,0.735,73.9,26122017,false,0.545,0.015
+HON,Industrials,Industrials,396.47,0.114,0.2872,1.38,69.3,57064870,false,0.024,0.385
+GE,Industrials,Industrials,661.72,0.1025,0.2373,1.032,88.7,64433519,false,0.884,-0.481
+RTX,Industrials,Industrials,351.11,0.1137,0.3275,1.322,57.3,15337866,false,-0.855,-0.519
+UPS,Industrials,Industrials,547.03,0.0627,0.2673,1.277,87.0,18127963,false,0.321,-0.714
+AMZN,Consumer Discretionary,Consumer Discretionary,383.39,0.1477,0.3329,0.826,89.1,38851834,false,0.98,0.665
+TSLA,Consumer Discretionary,Consumer Discretionary,262.75,0.107,0.2949,1.062,65.2,21638296,false,0.444,-0.961
+HD,Consumer Discretionary,Consumer Discretionary,401.27,0.1132,0.2169,0.664,64.9,58033801,false,-0.871,0.97
+MCD,Consumer Discretionary,Consumer Discretionary,591.98,0.1378,0.3338,0.734,62.4,8364996,false,-0.459,-0.741
+NKE,Consumer Discretionary,Consumer Discretionary,692.21,0.0993,0.3205,1.305,62.1,17696275,false,0.141,0.401
+GOOGL,Communication Services,Communication Services,705.92,0.0644,0.1327,1.201,68.6,11155198,false,0.269,0.603
+META,Communication Services,Communication Services,277.49,0.0638,0.3084,0.703,85.6,43570749,false,0.106,0.853
+NFLX,Communication Services,Communication Services,150.44,0.0831,0.1484,1.072,61.3,14303374,false,-0.899,-0.596
+DIS,Communication Services,Communication Services,162.2,0.0878,0.1871,1.258,63.3,47507530,false,-0.306,-0.964

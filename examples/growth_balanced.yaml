@@ -1,0 +1,56 @@
+universe: sample_large_cap
+capital: 1000000
+rebalance_frequency: monthly
+
+objective:
+  type: mean_variance
+  risk_aversion: 0.70
+  transaction_cost_penalty: 0.20
+
+constraints:
+  cardinality:
+    exactly: 18
+
+  weights:
+    min_if_selected: 0.025
+    max_if_selected: 0.095
+
+  sectors:
+    Technology:
+      max_weight: 0.26
+    Healthcare:
+      max_weight: 0.22
+    Energy:
+      max_weight: 0.12
+    Utilities:
+      min_weight: 0.04
+    Consumer Staples:
+      min_weight: 0.05
+
+  risk:
+    beta:
+      min: 0.80
+      max: 1.15
+    volatility:
+      max: 0.26
+
+  liquidity:
+    min_average_daily_volume: 8000000
+
+  esg:
+    min_score: 58
+
+  defensive:
+    min_count: 4
+
+  turnover:
+    max: 0.25
+
+  logic:
+    - if_selected: TSLA
+      then_not_selected: F
+    - forbid_pair: [V, MA]
+      reason: redundant payment network exposure
+
+  correlation:
+    forbid_pair_above: 0.90
