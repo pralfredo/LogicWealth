@@ -144,6 +144,45 @@ function loadStress(){
   document.querySelector('#solver').scrollIntoView({ behavior:'smooth' });
 }
 
+async function loadUniverse() {
+  const tableBody = document.querySelector("#universeTableBody");
+  const status = document.querySelector("#apiStatus");
+
+  try {
+    const response = await fetch(`${API_BASE}/api/assets`);
+
+    if (!response.ok) {
+      throw new Error("API unavailable");
+    }
+
+    const assets = await response.json();
+    status.textContent = "API online";
+    status.classList.remove("offline");
+    status.classList.add("online");
+
+    renderUniverse(assets);
+  } catch (error) {
+    console.warn("FastAPI unavailable. Loading static universe fallback.");
+
+    try {
+      const fallback = await fetch("./data/universe.json");
+      const assets = await fallback.json();
+
+      status.textContent = "Static demo mode";
+      status.classList.remove("online");
+      status.classList.add("offline");
+
+      renderUniverse(assets);
+    } catch (fallbackError) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="8">Could not load universe data.</td>
+        </tr>
+      `;
+    }
+  }
+}
+
 // Background constellation
 const canvas = $('constellation');
 const ctx = canvas.getContext('2d');

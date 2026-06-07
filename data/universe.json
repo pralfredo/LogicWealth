@@ -1,0 +1,61 @@
+[
+  { "ticker": "AAPL", "sector": "Technology" },
+  { "ticker": "MSFT", "sector": "Technology" },
+  { "ticker": "NVDA", "sector": "Technology" },
+  { "ticker": "AVGO", "sector": "Technology" },
+  { "ticker": "ORCL", "sector": "Technology" },
+  { "ticker": "CRM", "sector": "Technology" },
+  { "ticker": "ADBE", "sector": "Technology" },
+  { "ticker": "AMD", "sector": "Technology" },
+  { "ticker": "INTC", "sector": "Technology" },
+  { "ticker": "CSCO", "sector": "Technology" },
+
+  { "ticker": "GOOGL", "sector": "Communication Services" },
+  { "ticker": "META", "sector": "Communication Services" },
+  { "ticker": "NFLX", "sector": "Communication Services" },
+  { "ticker": "DIS", "sector": "Communication Services" },
+  { "ticker": "TMUS", "sector": "Communication Services" },
+
+  { "ticker": "AMZN", "sector": "Consumer Discretionary" },
+  { "ticker": "TSLA", "sector": "Consumer Discretionary" },
+  { "ticker": "HD", "sector": "Consumer Discretionary" },
+  { "ticker": "MCD", "sector": "Consumer Discretionary" },
+  { "ticker": "NKE", "sector": "Consumer Discretionary" },
+
+  { "ticker": "JPM", "sector": "Financials" },
+  { "ticker": "BAC", "sector": "Financials" },
+  { "ticker": "GS", "sector": "Financials" },
+  { "ticker": "MS", "sector": "Financials" },
+  { "ticker": "V", "sector": "Financials" },
+  { "ticker": "MA", "sector": "Financials" },
+  { "ticker": "AXP", "sector": "Financials" },
+
+  { "ticker": "UNH", "sector": "Healthcare" },
+  { "ticker": "JNJ", "sector": "Healthcare" },
+  { "ticker": "LLY", "sector": "Healthcare" },
+  { "ticker": "PFE", "sector": "Healthcare" },
+  { "ticker": "MRK", "sector": "Healthcare" },
+  { "ticker": "ABBV", "sector": "Healthcare" },
+  { "ticker": "TMO", "sector": "Healthcare" },
+
+  { "ticker": "PG", "sector": "Consumer Staples" },
+  { "ticker": "KO", "sector": "Consumer Staples" },
+  { "ticker": "PEP", "sector": "Consumer Staples" },
+  { "ticker": "COST", "sector": "Consumer Staples" },
+  { "ticker": "WMT", "sector": "Consumer Staples" },
+
+  { "ticker": "XOM", "sector": "Energy" },
+  { "ticker": "CVX", "sector": "Energy" },
+  { "ticker": "COP", "sector": "Energy" },
+
+  { "ticker": "NEE", "sector": "Utilities" },
+  { "ticker": "DUK", "sector": "Utilities" },
+  { "ticker": "SO", "sector": "Utilities" },
+
+  { "ticker": "CAT", "sector": "Industrials" },
+  { "ticker": "GE", "sector": "Industrials" },
+  { "ticker": "HON", "sector": "Industrials" },
+  { "ticker": "RTX", "sector": "Industrials" },
+
+  { "ticker": "PLD", "sector": "Real Estate" }
+]
