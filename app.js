@@ -136,7 +136,8 @@ async function loadAssets(){
     universe = await api('/api/assets');
     renderUniverse();
   }catch(e){
-    $('assetRows').innerHTML = `<tr><td colspan="8" class="bad-text">Could not load universe. Start the FastAPI server.</td></tr>`;
+    renderUniverse(STATIC_UNIVERSE);
+    setApiStatus('Static demo mode', false);
   }
 }
 
