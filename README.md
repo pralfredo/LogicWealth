@@ -1052,3 +1052,15 @@ POST /api/solve
 ```
 
 The static frontend files live in `dashboard/`. The backend app lives in `logicwealth/api/app.py`.
+
+---
+
+## Author
+
+Pramithas Upreti
+
+Computer Science • Mathematics • AI & Machine Learning
+
+GitHub: https://github.com/pralfredo
+
+MIT License 2026
