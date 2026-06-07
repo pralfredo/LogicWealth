@@ -181,6 +181,7 @@ async function solve(){
   $('solveBtn').disabled = true;
   $('solveBtn').textContent = 'Solving…';
   $('solveTime').textContent = 'compiling mandate';
+
   try{
     const payload = {
       backend: $('backend').value,
@@ -188,13 +189,23 @@ async function solve(){
       constraints: constraintsFromForm(),
       why_not: ($('whyNot').value || '').trim().toUpperCase() || null
     };
-    const data = await api('/api/solve', { method:'POST', body: JSON.stringify(payload) });
+
+    const data = await api('/api/solve', {
+      method:'POST',
+      body: JSON.stringify(payload)
+    });
+
     renderSolution(data);
     $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
   }catch(e){
-    $('whyNotText').textContent = `Solver error:\n${e.message}`;
-    $('kpiStatus').textContent = 'ERROR';
-    $('solveTime').textContent = 'failed';
+    const data = staticDemoSolve();
+    renderSolution(data);
+
+    $('kpiStatus').textContent = 'STATIC DEMO';
+    $('solveTime').textContent = `${Math.round(performance.now()-start)} ms`;
+    $('whyNotText').textContent =
+      data.why_not ||
+      'GitHub Pages cannot run the FastAPI solver, so this portfolio was generated from the embedded static universe.';
   }finally{
     $('solveBtn').disabled = false;
     $('solveBtn').textContent = 'Solve Portfolio';
@@ -258,6 +269,65 @@ function renderUniverse(assets) {
       <td>${Number(asset.adv || 0).toLocaleString()}</td>
     </tr>
   `).join("");
+}
+
+function solveStaticDemo() {
+  const selected = STATIC_UNIVERSE
+    .filter(asset =>
+      asset.esg >= 58 &&
+      asset.adv >= 8000000 &&
+      asset.volatility <= 0.30 &&
+      asset.beta >= 0.80 &&
+      asset.beta <= 1.15
+    )
+    .slice(0, 18);
+
+  const weight = 1 / selected.length;
+
+  const holdings = selected.map(asset => ({
+    ...asset,
+    weight,
+    shares: Math.floor((1000000 * weight) / asset.price)
+  }));
+
+  function renderPortfolio(result) {
+  const holdingsBody =
+    document.querySelector("#holdingsTableBody") ||
+    document.querySelector("#portfolioTableBody");
+
+  const checksBox = document.querySelector("#checks");
+  const whyNotBox = document.querySelector("#whyNotExplanation");
+
+  if (holdingsBody) {
+    holdingsBody.innerHTML = result.holdings.map(asset => `
+      <tr>
+        <td>${asset.ticker}</td>
+        <td>${asset.sector}</td>
+        <td>${(asset.weight * 100).toFixed(2)}%</td>
+        <td>${asset.shares.toLocaleString()}</td>
+        <td>${(asset.expected_return * 100).toFixed(1)}%</td>
+        <td>${(asset.volatility * 100).toFixed(1)}%</td>
+        <td>${asset.beta.toFixed(2)}</td>
+        <td>${asset.esg}</td>
+      </tr>
+    `).join("");
+  }
+
+  if (checksBox) {
+    checksBox.innerHTML = result.checks.map(check => `
+      <div class="check-item">✓ ${check}</div>
+    `).join("");
+  }
+
+  if (whyNotBox) {
+    whyNotBox.textContent = result.why_not;
+  }
+}
+}
+
+function average(values) {
+  if (!values.length) return 0;
+  return values.reduce((a, b) => a + b, 0) / values.length;
 }
 
 // Background constellation
