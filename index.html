@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogicWealth | SMT Portfolio Construction Terminal</title>
+  <link rel="stylesheet" href="/dashboard/styles.css" />
+</head>
+<body>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <main class="shell">
+    <nav class="nav glass">
+      <a class="brand" href="#top"><span class="sigil">∀</span><span>LogicWealth</span></a>
+      <div class="navlinks">
+        <a href="#solver">Solver</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#universe">Universe</a>
+        <a href="/docs" target="_blank">API Docs</a>
+      </div>
+      <div class="status-pill" id="apiStatus"><span></span> Checking API</div>
+    </nav>
+
+    <section id="top" class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">SMT • Portfolio optimization • Formal constraints</p>
+        <h1>Build portfolios from logic, not vibes.</h1>
+        <p class="subtitle">A live quant terminal for LogicWealth: edit mandate constraints, compile them into a solver request, and inspect the resulting portfolio with certificate-style explanations.</p>
+        <div class="hero-actions">
+          <a class="button" href="#solver">Launch Solver</a>
+          <button class="button ghost" id="loadStrict">Load UNSAT-ish Stress Mandate</button>
+        </div>
+      </div>
+      <div class="terminal glass tilt">
+        <div class="term-head"><span></span><span></span><span></span><b>PortLogic mandate</b></div>
+<pre><code>objective maximize α - λσ
+subject to:
+  Σwᵢ = 1
+  xᵢ ⇒ 2.5% ≤ wᵢ ≤ 9.5%
+  Technology ≤ 26%
+  beta ∈ [0.80, 1.15]
+  ESG ≥ 58
+  corr(i,j) > .90 ⇒ ¬(xᵢ ∧ xⱼ)</code></pre>
+      </div>
+    </section>
+
+    <section class="kpis" id="portfolio">
+      <article class="glass metric"><span>Status</span><strong id="kpiStatus">—</strong><small id="kpiBackend">backend: —</small></article>
+      <article class="glass metric"><span>Expected Return</span><strong id="kpiReturn">—</strong><small>annualized proxy</small></article>
+      <article class="glass metric"><span>Volatility</span><strong id="kpiVol">—</strong><small>correlation proxy</small></article>
+      <article class="glass metric"><span>Sharpe Proxy</span><strong id="kpiSharpe">—</strong><small>return / volatility</small></article>
+    </section>
+
+    <section class="workspace" id="solver">
+      <aside class="panel glass controls">
+        <div class="section-head">
+          <p class="eyebrow">Mandate editor</p>
+          <h2>Real-world constraints</h2>
+        </div>
+
+        <div class="control-grid">
+          <label>Backend
+            <select id="backend">
+              <option value="auto">auto</option>
+              <option value="z3">z3</option>
+              <option value="greedy">greedy</option>
+            </select>
+          </label>
+          <label>Capital
+            <input id="capital" type="number" value="1000000" step="50000" />
+          </label>
+          <label>Exactly K assets
+            <input id="cardinality" type="number" value="18" min="3" max="80" />
+          </label>
+          <label>Min weight
+            <input id="minWeight" type="number" value="0.025" step="0.005" min="0" max="1" />
+          </label>
+          <label>Max weight
+            <input id="maxWeight" type="number" value="0.095" step="0.005" min="0" max="1" />
+          </label>
+          <label>ESG minimum
+            <input id="esgMin" type="number" value="58" step="1" />
+          </label>
+          <label>Liquidity minimum ADV
+            <input id="liqMin" type="number" value="8000000" step="1000000" />
+          </label>
+          <label>Correlation forbid above
+            <input id="corrMax" type="number" value="0.90" step="0.01" min="0" max="1" />
+          </label>
+          <label>Beta min
+            <input id="betaMin" type="number" value="0.80" step="0.01" />
+          </label>
+          <label>Beta max
+            <input id="betaMax" type="number" value="1.15" step="0.01" />
+          </label>
+          <label>Volatility max
+            <input id="volMax" type="number" value="0.26" step="0.01" />
+          </label>
+          <label>Why not ticker?
+            <input id="whyNot" type="text" value="NVDA" maxlength="8" />
+          </label>
+        </div>
+
+        <h3>Sector caps / floors</h3>
+        <div class="sector-editor">
+          <label>Technology max <input id="techMax" type="number" value="0.26" step="0.01"></label>
+          <label>Healthcare max <input id="healthMax" type="number" value="0.22" step="0.01"></label>
+          <label>Energy max <input id="energyMax" type="number" value="0.12" step="0.01"></label>
+          <label>Utilities min <input id="utilitiesMin" type="number" value="0.04" step="0.01"></label>
+          <label>Staples min <input id="staplesMin" type="number" value="0.05" step="0.01"></label>
+        </div>
+
+        <div class="button-row">
+          <button class="button" id="solveBtn">Solve Portfolio</button>
+          <button class="button ghost" id="resetBtn">Reset</button>
+        </div>
+      </aside>
+
+      <section class="panel glass results">
+        <div class="section-head horizontal">
+          <div>
+            <p class="eyebrow">Live output</p>
+            <h2>Constraint certificate</h2>
+          </div>
+          <span id="solveTime" class="chip">not run</span>
+        </div>
+
+        <div class="result-grid">
+          <article class="card proof-card">
+            <h3>Checks</h3>
+            <ul id="checks"></ul>
+          </article>
+          <article class="card sector-card">
+            <h3>Sector exposure</h3>
+            <div id="sectorBars" class="bars"></div>
+          </article>
+        </div>
+
+        <article class="card holdings-card">
+          <div class="table-head">
+            <h3>Selected holdings</h3>
+            <span id="holdingCount">0 assets</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Ticker</th><th>Sector</th><th>Weight</th><th>Shares</th><th>Ret.</th><th>Vol.</th><th>Beta</th><th>ESG</th></tr></thead>
+              <tbody id="holdings"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card explain-card">
+          <h3>Why-not explanation</h3>
+          <pre id="whyNotText">Run the solver to inspect exclusions.</pre>
+        </article>
+      </section>
+    </section>
+
+    <section class="panel glass universe" id="universe">
+      <div class="section-head horizontal">
+        <div>
+          <p class="eyebrow">Asset universe</p>
+          <h2>Sample large-cap data</h2>
+        </div>
+        <input id="assetSearch" placeholder="Search ticker or sector" />
+      </div>
+      <div class="table-wrap universe-table">
+        <table>
+          <thead><tr><th>Ticker</th><th>Sector</th><th>Price</th><th>Return</th><th>Volatility</th><th>Beta</th><th>ESG</th><th>ADV</th></tr></thead>
+          <tbody id="assetRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/dashboard/app.js"></script>
+</body>
+</html>
